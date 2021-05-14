@@ -1,7 +1,8 @@
 <template>
-  <div class="product-container">
+  <div v-if="products.length>0">
     <CarListItem v-for="product in products" :key="product.id" :product="product" />
   </div>
+  <p v-else>You have not added any item into the cart</p>
 </template>
 <script>
 import CarListItem from "./CartListItem.vue";

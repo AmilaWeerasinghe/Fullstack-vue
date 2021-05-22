@@ -138,7 +138,19 @@ app.post('/api/users/:userId/cart',(req,res)=>{
     else{
         res.status(404).json('Could not find the product');
     }
-})
+});
+
+//end point for removing data from the cart items
+app.delete('/api/users/:userId/cart/:productId',(req,res)=>{
+    //take the url product id parameter
+    const {productId}=req.params;
+    //filter out product items except the id that we want to delete
+    cartItems=cartItems.filter((product)=>product.id!==productId);
+    //return the new cartItems
+    res.status(200).json(cartItems);
+});
+
+
 
 app.get('/hello', (req, res) => {
     res.send('Hello!');

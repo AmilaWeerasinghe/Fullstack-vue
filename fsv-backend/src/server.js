@@ -101,6 +101,30 @@ const products = [{
 const app = express();
 app.use(bodyParser.json());
 
+
+//end point for all products
+app.get('/api/products',(req,res)=>{
+    res.status(200).json(products);
+});
+
+//end point for users cart items 
+app.get('/api/users/:userId/cart',(req,res)=>{
+    res.status(200).json(cartItems);
+});
+
+//end point for product details page
+app.get('/api/products/:productId',(req,res)=>{
+    const { productId } = req.params;
+    const product = products.find((product)=>product.id===productId);
+
+    //404 for not availavble products
+    if(product){
+        res.status(200).json(product);
+    }else{
+        res.status(404).json('could not find the product')
+    }
+})
+
 app.get('/hello', (req, res) => {
     res.send('Hello!');
 });

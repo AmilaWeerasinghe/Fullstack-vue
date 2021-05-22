@@ -123,6 +123,21 @@ app.get('/api/products/:productId',(req,res)=>{
     }else{
         res.status(404).json('could not find the product')
     }
+});
+
+
+//end point to post data to cart items
+
+app.post('/api/users/:userId/cart',(req,res)=>{
+    const {productId}= req.body;
+    const product=products.find((product)=>product.id===productId);
+    if (product){
+        cartItems.push(product);
+        res.status(200).json(cartItems);
+    }
+    else{
+        res.status(404).json('Could not find the product');
+    }
 })
 
 app.get('/hello', (req, res) => {
@@ -139,6 +154,7 @@ app.post('/hello',(req,res)=>{
 app.get('/hello/:name',(req,res)=>{
     res.send(`hello ${req.params.name}`);
 })
+
 
 app.listen(8000, () => {
     console.log('Server is listening on port 8000!!! on node backend by Amila');

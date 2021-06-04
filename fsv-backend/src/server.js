@@ -190,13 +190,38 @@ app.post('/api/users/:userId/cart',async (req,res)=>{
 });
 
 //end point for removing data from the cart items
-app.delete('/api/users/:userId/cart/:productId',(req,res)=>{
+app.delete('/api/users/:userId/cart/:productId',async (req,res)=>{
     //take the url product id parameter
-    const {productId}=req.params;
+    const {userId,productId}=req.params;
+    const client=await MongoClient.connect(
+      'mongodb://localhost:27017',
+      {useNewUrlParser:true,useUnifiedTopology:true}
+    );
+    const db=client.db('vue-db');
+
+    await db.collection('users').updateOne({id:userId},{
+      $pull:{cartItems:productId},
+
+    });
+
+    const user=await db.collection('users').findOne({id:userId});
+
+    const products=await db.collection('products').find({}).toArray();
+
+    const cartItemIds=user.cartItems;
+    const cartItems=cartItemIds.map(id=>
+      products.find(product=>product.id===id));
+
+    
+        res.status(200).json(cartItems);
+        client.close();
+
+    
+
     //filter out product items except the id that we want to delete
-    cartItems=cartItems.filter((product)=>product.id!==productId);
+   
     //return the new cartItems
-    res.status(200).json(cartItems);
+    
 });
 
 

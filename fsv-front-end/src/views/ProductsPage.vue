@@ -4,18 +4,23 @@
   </div>
 </template>
 <script>
-import { products } from "../fake-data";
 import ProductGrid from "../components/ProductGrid.vue";
+import axios from "axios";
 export default {
   name: "ProductsPage",
   data() {
     return {
-      products,
+      products: []
     };
   },
   components: {
-    ProductGrid,
+    ProductGrid
   },
+  async created() {
+    const result = await axios.get("/api/products");
+    const products = result.data;
+    this.products = products;
+  }
 };
 </script>
 
